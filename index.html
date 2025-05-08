@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Juego de Preguntas - UANE</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #8C1D40, #a64d79);
+      color: #fff;
+      text-align: center;
+      padding: 50px;
+      min-height: 100vh;
+      position: relative;
+    }
+    .logo {
+      position: absolute;
+      top: 20px;
+      width: 100px;
+    }
+    .logo.izquierda {
+      left: 20px;
+    }
+    .logo.derecha {
+      right: 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 36px;
+    }
+    .registro {
+      background: rgba(255,255,255,0.2);
+      padding: 30px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 30px;
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: none;
+      width: 250px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      margin-top: 10px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      background: #fff;
+      color: #8C1D40;
+    }
+    .pregunta {
+      margin-top: 50px;
+      font-size: 28px;
+      background: rgba(0,0,0,0.3);
+      padding: 20px;
+      border-radius: 15px;
+      display: inline-block;
+    }
+    .opciones {
+      margin-top: 20px;
+    }
+    button.opcion {
+      padding: 12px 25px;
+      margin: 10px;
+      font-size: 18px;
+      background: #fff;
+      color: #8C1D40;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .puntaje {
+      margin-top: 40px;
+      font-size: 26px;
+      background: rgba(255,255,255,0.2);
+      padding: 20px;
+      border-radius: 15px;
+      display: inline-block;
+    }
+    table {
+      margin: 20px auto;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 10px 20px;
+      border-bottom: 1px solid #fff;
+    }
+  </style>
+</head>
+<body>
+  <img class="logo izquierda" src="uane logo.png" alt="Logo UANE">
+  <img class="logo derecha" src="Preview.png" alt="Logo UANE Derecha">
+  <h1>Preguntas UANE 🐻</h1>
+  <div class="registro" id="registro">
+    <h2>Ingresa tu nombre para comenzar</h2>
+    <input type="text" id="nombreJugador" placeholder="Tu nombre">
+    <br>
+    <button onclick="iniciarJuego()">Comenzar</button>
+  </div>
+
+  <div class="pregunta" id="pregunta" style="display:none;"></div>
+  <div class="opciones" id="opciones"></div>
+  <div class="puntaje" id="puntaje" style="display:none;"></div>
+  <div id="tablaResultados" style="display:none;"></div>
+
+  <script>
+   const preguntas = [
+  { texto: " Intervención psicopedagógica en donde se busca ayudar a los estudiantes a desarrollar sus capacidades y habilidades con el fin de afrontar problemas y definir objetivos escolares y personales.", opciones: ["Orientación profesional", "Orientación vocacional", "ORIENTACIÓN EDUCATIVA"], correcta: "ORIENTACIÓN EDUCATIVA" },
+  { texto: " Principios de la orientación educativa.", opciones: ["Intervención social, desarrollo e inicio", "PREVENCIÓN, DESARROLLO E INTERVENCIÓN SOCIAL", "Prevención, cierre y empatía", "Estudiar, desarrollo y acompañamiento"], correcta: "PREVENCIÓN, DESARROLLO E INTERVENCIÓN SOCIAL" },
+  { texto: " Autor que propuso la teoría de las inteligencias múltiples.", opciones: ["Jacobo Gardner", "Howard Green", "Joseph Benet", "HOWARD GARDNER"], correcta: "HOWARD GARDNER" },
+  { texto: " Proceso cuyo propósito es ayudar a los adolescentes y jóvenes en la elección de una carrera profesional, considerando los factores internos y externos del estudiante.", opciones: ["Orientación educativa", "ORIENTACIÓN VOCACIONAL", "Orientación profesional"], correcta: "ORIENTACIÓN VOCACIONAL" },
+  { texto: " Facultad de apreciar, discriminar, transformar y expresar las formas musicales, además de la sensibilidad al ritmo, el tono y el timbre.", opciones: ["Inteligencia interpersonal", "Inteligencia kinestésica", "INTELIGENCIA MUSICAL", "Inteligencia matemática"], correcta: "INTELIGENCIA MUSICAL" },
+  { texto: " Capacidad para utilizar los números de manera efectiva, así como aplicar el análisis y el razonamiento de manera adecuada.", opciones: ["Inteligencia musical", "INTELIGENCIA LÓGICO-MATEMÁTICA", "Inteligencia kinestésica", "Inteligencia interpersonal"], correcta: "INTELIGENCIA LÓGICO-MATEMÁTICA" },
+  { texto: " Capacidad de crear e imaginar dibujos en dos o tres dimensiones, además de la habilidad para manejar, entender y transformar los diferentes espacios.", opciones: ["INTELIGENCIA VISUAL-ESPACIAL", "Inteligencia musical", "Inteligencia kinestésica", "Inteligencia lingüística"], correcta: "INTELIGENCIA VISUAL-ESPACIAL" },
+  { texto: " Capacidad de unir el cuerpo y la mente para lograr el perfeccionamiento del desempeño físico.", opciones: ["Inteligencia interpersonal", "Inteligencia intrapersonal", "INTELIGENCIA CINESTÉSICA", "Inteligencia musical"], correcta: "INTELIGENCIA CINESTÉSICA" },
+  { texto: " Capacidad de una persona para comprender a otras personas con las que se relaciona, comunicarse con ellas e interactuar satisfactoriamente.", opciones: ["INTELIGENCIA INTERPERSONAL", "Inteligencia visual", "Inteligencia matemática", "Inteligencia intrapersonal"], correcta: "INTELIGENCIA INTERPERSONAL" },
+  { texto: " La  estructuras básicas del pensamiento son:", opciones: ["Imágenes y textos", "Conceptos y videos", "IMÁGENES Y CONCEPTOS", "Razonamiento y palabras"], correcta: "IMÁGENES Y CONCEPTOS" },
+  { texto: " Razonar y pensar, ¿son lo mismo?", opciones: ["NO", "Sí"], correcta: "NO" },
+  { texto: " Cuando se memoriza la información pero no se comprende.", opciones: ["INFORMACIÓN INERTE", "Información activa", "Conocimiento activo", "Ignorancia activa"], correcta: "INFORMACIÓN INERTE" },
+  { texto: " Cuando usamos la información correctamente y la entendemos.", opciones: ["CONOCIMIENTO ACTIVO", "Ignorancia inerte", "Información activa", "Conocimiento inerte"], correcta: "CONOCIMIENTO ACTIVO" },
+  { texto: " Comparo o relaciono dos o más objetos a través de la razón. Señala características generales y particulares basado en una semejanza.", opciones: ["Método deductivo", "Método inductivo", "Método dialéctico", "MÉTODO ANALÓGICO"], correcta: "MÉTODO ANALÓGICO" },
+  { texto: " Da por hecho algo.", opciones: ["PRESUPONER", "Sistema de creencias", "Inferencia", "Conocimiento"], correcta: "PRESUPONER" },
+  { texto: " Parte de una conclusión, ley o principio general y desciende a los casos particulares.", opciones: ["MÉTODO DEDUCTIVO", "Método inductivo", "Método analógico", "Método dialéctico"], correcta: "MÉTODO DEDUCTIVO" },
+  { texto: " Obtiene conclusiones generales a partir de premisas particulares. Generaliza a partir de sus observaciones empíricas y luego construye teorías.", opciones: ["Método deductivo", "MÉTODO INDUCTIVO", "Método dialéctico", "Método analógico"], correcta: "MÉTODO INDUCTIVO" },
+  { texto: " Se describe como el arte del diálogo, un debate en donde se trabaja un tema visualizando una evolución en tres momentos sucesivos. Tesis (pensamiento va avanzando desde una afirmación inicial) Antítesis (se opone una segunda idea) Síntesis (se llega a una afirmación nueva).", opciones: ["Método inductivo", "MÉTODO DIALÉCTICO", "Método deductivo", "Método analógico"], correcta: "MÉTODO DIALÉCTICO" },
+  { texto: " Es una organización social, integrada por individuos que asumen diferentes roles con el propósito básico de garantizar la transmisión, adquisición y producción del saber.", opciones: ["ORGANIZACIÓN EDUCATIVA", "Organización laboral", "Organización personal", "Organización ejecutiva"], correcta: "ORGANIZACIÓN EDUCATIVA" },
+  { texto: " Se concluye en la verdad de una idea, basándose en la verdad de otro concepto.", opciones: ["INFERENCIAS", "Asunciones", "Ignorancia", "Conocimiento"], correcta: "INFERENCIAS" },
+  { texto: " Hace referencia a la capacidad de relacionar conocimientos que poseemos para resolver una determinada situación.", opciones: ["Asunción", "Relación", "Pensamiento", "INTELIGENCIA"], correcta: "INTELIGENCIA" },
+  { texto: " Capacidad que posee una persona para utilizar un lenguaje, bien sea escrito u oral, a un alto nivel.", opciones: ["INTELIGENCIA LINGÜÍSTICA", "Inteligencia musical", "Inteligencia visual espacial", "Inteligencia matemática"], correcta: "INTELIGENCIA LINGÜÍSTICA" },
+  { texto: " Capacidad que nos permite conocernos mediante un autoanálisis.", opciones: ["Inteligencia interpersonal", "Inteligencia cinestésica", "INTELIGENCIA INTRAPERSONAL", "Inteligencia musical"], correcta: "INTELIGENCIA INTRAPERSONAL" },
+  { texto: " Cuando se toma esta información falsa y se usa activamente.", opciones: ["Información inerte", "Conocimiento activo", "IGNORANCIA ACTIVA", "Conocimiento inerte"], correcta: "IGNORANCIA ACTIVA" }
+
+  ];
+
+    let jugador = "";
+    let puntaje = 0;
+    let preguntaActual = {};
+    let jugadores = JSON.parse(localStorage.getItem('jugadores')) || [];
+
+    function iniciarJuego() {
+      const nombre = document.getElementById('nombreJugador').value.trim();
+      if (!nombre) return alert('Por favor ingresa tu nombre');
+
+      jugador = nombre;
+      document.getElementById('registro').style.display = 'none';
+      document.getElementById('pregunta').style.display = 'block';
+      cargarPregunta();
+    }
+
+    function cargarPregunta() {
+      if (preguntas.length === 0) {
+        mostrarPuntajeFinal();
+        return;
+      }
+
+      const indice = Math.floor(Math.random() * preguntas.length);
+      preguntaActual = preguntas.splice(indice, 1)[0];
+
+      document.getElementById('pregunta').textContent = preguntaActual.texto;
+      const opcionesDiv = document.getElementById('opciones');
+      opcionesDiv.innerHTML = '';
+
+      preguntaActual.opciones.forEach(opcion => {
+        const boton = document.createElement('button');
+        boton.className = "opcion";
+        boton.textContent = opcion;
+        boton.onclick = () => verificarRespuesta(opcion);
+        opcionesDiv.appendChild(boton);
+      });
+    }
+
+    function verificarRespuesta(respuestaSeleccionada) {
+      if (respuestaSeleccionada === preguntaActual.correcta) {
+        puntaje++;
+      }
+      setTimeout(cargarPregunta, 300);
+    }
+
+    function mostrarPuntajeFinal() {
+      document.getElementById('pregunta').textContent = "🐻 ¡Has terminado! 🐻";
+      document.getElementById('opciones').innerHTML = '';
+      document.getElementById('puntaje').style.display = 'block';
+      document.getElementById('puntaje').innerHTML = `Tu puntaje final es: ${puntaje} 🐻`;
+
+      if (!jugadores.find(j => j.nombre === jugador)) {
+        jugadores.push({ nombre: jugador, puntaje });
+        localStorage.setItem('jugadores', JSON.stringify(jugadores));
+      }
+      mostrarTabla();
+    }
+
+    function mostrarTabla() {
+      const tablaDiv = document.getElementById('tablaResultados');
+      tablaDiv.style.display = 'block';
+      let html = '<table><tr><th>Nombre</th><th>Puntaje</th></tr>';
+      jugadores.forEach(j => {
+        html += `<tr><td>${j.nombre}</td><td>${j.puntaje}</td></tr>`;
+      });
+      html += '</table>';
+      tablaDiv.innerHTML = html;
+    }
+  </script>
+</body>
+</html>
